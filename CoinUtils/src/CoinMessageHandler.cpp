@@ -377,7 +377,13 @@ extern int coinFlushBufferFlag;
 // Print message, return 0 normally
 int CoinMessageHandler::print()
 {
-  fprintf(fp_, "%s\n", messageBuffer_);
+  char dest[128];
+  time_t temp;
+  struct tm *timeptr;
+  temp = time(NULL);
+  timeptr = localtime(&temp);
+  strftime(dest, sizeof(dest) - 1, "%F %T %Z", timeptr);
+  fprintf(fp_, "[%s] %s\n", dest, messageBuffer_);
 #if FLUSH_PRINT_BUFFER
 #if FLUSH_PRINT_BUFFER < 2
   fflush(fp_);
